@@ -68,15 +68,15 @@ def calculate_quantities_jit(rIn, LIn, distHistBinsIn, distHistBinSizeIn):
 
 class ArgonSimulation:
 	## simulation parameters
-	simulationTime = 50.0 # total simulation time
+	simulationTime = 40.0 # total simulation time
 	h = 0.004 # time step
 	numSteps = None # number of simulation steps
 	numFrames = 50 # number of frames of the molecular configuration to be shown during simulation
 	reportFreq = 0.05 # fraction of simulation progress that should be reported by a short text message
 
 	rescalingPeriod = 100 # number of time steps between each velocity rescaling to reach the desired temperature
-	rescalingTime = 20.0 # time until we should do the rescaling procedure to end up at the desired temperature
-	equilibrationTime = 30.0 # time until we consider the system to be in equilibrium
+	rescalingTime = 15.0 # time until we should do the rescaling procedure to end up at the desired temperature
+	equilibrationTime = 20.0 # time until we consider the system to be in equilibrium
 	equilibriumStart = None # time step from which we consider the system to be in equilibrium
 
 	## system parameters
@@ -124,6 +124,7 @@ class ArgonSimulation:
 	#                    and allocates the arrays that hold the simulation
 	#                    results
 	def initialise_arrays(self, desiredTIn, rhoIn, MIn):
+		self.t = 0
 		self.numSteps = int(self.simulationTime / self.h)
 		self.equilibriumStart = int(self.equilibrationTime / self.h)
 
@@ -198,7 +199,7 @@ class ArgonSimulation:
 		
 		vInit = np.zeros((self.n, 3))
 
-		if set_v:
+		if set_v and self.sigma_v > 0.0:
 			# start with random Gaussian velocities
 			vInit = np.random.normal(0.0, self.sigma_v, size=(self.n,3))
 			# start with zero momentum and scale the variance to match the desired initial velocity
@@ -314,6 +315,9 @@ class ArgonSimulation:
 	def result_pressure(self):
 		return 1 + 1/(3 * self.n * np.mean(self.result_temperature())) * np.mean(self.virial[self.equilibriumStart:])
 
+	def result_distance_histogram(self):
+		return self.distHist[self.equilibriumStart:,:]
+
 	def result_correlation_function(self):
 		r_g = np.linspace(0.5*self.distHistBinSize, (self.distHistBins - 0.5)*self.distHistBinSize, self.distHistBins)
 		g = np.mean(self.distHist[self.equilibriumStart:,:], axis=0)/(4*np.pi*self.distHistBinSize*r_g**2)*2*self.L**3/(self.n*(self.n-1))
@@ -332,6 +336,17 @@ class ArgonSimulation:
 		results = dict()
 		for rm in result_methods:
 			results[rm[7:]] = getattr(self, rm)()
+
+		results["rho"] = self.rho
+		results["desiredT"] = self.desiredT
+		results["M"] = self.M
+		results["n"] = self.n
+		results["simulationTime"] = self.simulationTime
+		results["equilibrationTime"] = self.equilibrationTime
+		results["h"] = self.h
+		results["distHistBinSize"] = self.distHistBinSize
+		results["distHistBins"] = self.distHistBins
+
 		np.savez(filename, **results)
 
 
