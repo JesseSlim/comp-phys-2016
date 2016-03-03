@@ -330,8 +330,9 @@ class ArgonSimulation:
 
 	# this temperature calculation is slightly off (N should be replaced by N-1)
 	# this is fixed in transcribe_results, along with the temperature dependant pressure
+	# fixed now!
 	def result_temperature(self):
-		return 2*self.result_kinetic_energy()/(3*self.n)
+		return 2*self.result_kinetic_energy()/(3*self.n - 1)
 
 	def result_pressure(self):
 		return 1 + 1/(3 * self.n * np.mean(self.result_temperature())) * np.mean(self.virial[self.equilibriumStart:])
