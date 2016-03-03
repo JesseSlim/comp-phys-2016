@@ -4,7 +4,7 @@ Ms = [6]
 Ts = np.linspace(0.0, 4.0, 17)
 rhos = np.concatenate((np.array([0.02, 0.05]), np.linspace(0.1, 2.0, 20)))
 
-simJobs = np.arange(1,5)
+simJobs = [5]
 
 resultFiles = []
 

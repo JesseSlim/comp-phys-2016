@@ -6,10 +6,17 @@ import time
 sim = ArgonSimulation()
 
 Ms = [6]
-Ts = np.linspace(0.0, 4.0, 17)[:2]
+Ts = np.linspace(0.0, 4.0, 17)
 rhos = np.concatenate((np.array([0.02, 0.05]), np.linspace(0.1, 2.0, 20)))
 
-simJob = int(sys.argv[1])
+simJob = 5
+
+Tsblock_start = int(sys.argv[1])
+Tsblock_end = int(sys.argv[2])
+
+Ts = Ts[Tsblock_start:Tsblock_end]
+
+print("Ts for this simulation batch: " + str(Ts))
 
 for M in Ms:
     for T in Ts:
