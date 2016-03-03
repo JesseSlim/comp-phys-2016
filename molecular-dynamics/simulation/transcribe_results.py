@@ -19,11 +19,12 @@ for rFile in resultFiles:
 	with np.load("results/" + rFile) as data:
 		newData = dict()
 		for key in data:
-			if not (key == "distance_histogram" or key == "temperature" or key == "pressure"):
+			if not (key == "distance_histogram"):
 				newData[key] = data[key]
 
 		# calculation of instantaneous temperature contained an error, recalculate (and recalculate pressure)
-		newData["temperature"] = 2*data["kinetic_energy"]/(3*(data["n"] - 1))
+		# fixed as of 3-3-2016 22:30
+		#newData["temperature"] = 2*data["kinetic_energy"]/(3*(data["n"] - 1))
 		
-		newData["pressure"] = 1 + 1/(3 * data["n"] * np.mean(newData["temperature"])) * np.mean(data["virial"])
+		#newData["pressure"] = 1 + 1/(3 * data["n"] * np.mean(newData["temperature"])) * np.mean(data["virial"])
 		np.savez("results-nohist/" + rFile, **newData)
