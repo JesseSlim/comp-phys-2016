@@ -16,3 +16,5 @@ Some code was actually written twice as a matter of internal competition: these 
 
 ## Data analysis
 The final result quantities were extracted from the 'longrun' simulation results. Code for calculating these and plotting may be found in analysis/LongRun*.ipynb
+
+WARNING: Note that pulling this entire repository might be a bad idea, because we also used it to share raw simulation data (>15GB)
