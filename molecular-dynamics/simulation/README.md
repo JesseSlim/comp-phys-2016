@@ -4,7 +4,8 @@ This folder contains the code for the molecular dynamics argon simulation projec
 ## Simulation code
 The development of the simulation code was of course an iterative process and remnants of that process are strewn all over this folder. The files were developed in the following order:
 
-TestSimulation.ipynb -> ArgonSimulation.ipynb -> ArgonSimulation.py (final code that was actually used)
+TestSimulation.ipynb -> ArgonSimulation.ipynb -> ArgonSimulation.py (final code that was actually used).
+
 The final simulations were performed batchwise, controlled by the run_simulation_long.py script
 
 Other interesting files include:
